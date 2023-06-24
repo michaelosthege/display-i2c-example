@@ -8,7 +8,10 @@
 // and the way how it's connected.
 // For more options and documentation see https://github.com/olikraus/u8g2/wiki/u8g2setupcpp
 // Another useful resource is this video: https://www.youtube.com/watch?v=MHogSbRPa28
+// For 0.92" generic display:
 U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C display(U8G2_R0, PIN_A4, PIN_A5);
+// For 2.33" Waveshare:
+// U8G2_SSD1305_128X32_ADAFRUIT_F_HW_I2C display(U8G2_R0, PIN_A4, PIN_A5);
 
 // For cycling fonts:
 uint8_t f = 0;
