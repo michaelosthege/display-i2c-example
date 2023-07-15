@@ -9,9 +9,9 @@
 // For more options and documentation see https://github.com/olikraus/u8g2/wiki/u8g2setupcpp
 // Another useful resource is this video: https://www.youtube.com/watch?v=MHogSbRPa28
 // For 0.92" generic display:
-U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C display(U8G2_R0, PIN_A4, PIN_A5);
+// U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C display(U8G2_R0, PIN_A4, PIN_A5);
 // For 2.33" Waveshare:
-// U8G2_SSD1305_128X32_ADAFRUIT_F_HW_I2C display(U8G2_R0, PIN_A4, PIN_A5);
+U8G2_SSD1305_128X32_ADAFRUIT_F_HW_I2C display(U8G2_R0, PIN_A4, PIN_A5);
 
 // For cycling fonts:
 uint8_t f = 0;
@@ -22,9 +22,21 @@ const uint8_t* fonts[] {
     u8g2_DcsFontHornet4_BIOS_09_tf,  // for the scratch display
 };
 
+void switchToBus(uint8_t bus)
+{
+    Wire.beginTransmission(0x70);
+    Wire.write(1 << bus);
+    Wire.endTransmission();
+}
+
 void setup()
 {
     Serial.begin(9600);
+
+    Wire.begin();
+    switchToBus(1);
+    display.begin();
+    switchToBus(2);
     display.begin();
 }
 
@@ -40,8 +52,13 @@ void loop()
     }
 
     // Write something
+    switchToBus(1);
     display.clearBuffer();
-    display.drawStr(0, 32, "|ABC123");
+    display.drawStr(0, 32, "LINE 1");
+    display.sendBuffer();
+    switchToBus(2);
+    display.clearBuffer();
+    display.drawStr(0, 32, "LINE 2");
     display.sendBuffer();
 
     delay(1000);
